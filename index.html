@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EuroPress Aktuell – Nachrichten</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #f5f0e8;
+    font-family: 'Source Serif 4', Georgia, serif;
+    color: #1a1a1a;
+  }
+
+  /* ── TOP BAR ── */
+  .topbar {
+    background: #1a1a1a;
+    color: #c8a84b;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 32px;
+  }
+  .topbar span { color: #888; }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    background: #faf7f0;
+    border-bottom: 3px double #1a1a1a;
+    padding: 18px 32px 12px;
+    text-align: center;
+    position: relative;
+  }
+  .masthead-kicker {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #888;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .masthead h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    line-height: 1;
+    color: #1a1a1a;
+  }
+  .masthead-sub {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #555;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+  .masthead-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #ccc;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    color: #666;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: #1a1a1a;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    padding: 0 32px;
+  }
+  nav a {
+    color: #ddd;
+    text-decoration: none;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    white-space: nowrap;
+    transition: background 0.15s;
+  }
+  nav a:hover { background: #333; }
+  nav a.active { background: #c8a84b; color: #1a1a1a; font-weight: 600; }
+
+  /* ── BREAKING BANNER ── */
+  .breaking {
+    background: #c0392b;
+    color: #fff;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 8px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .breaking-label {
+    background: #fff;
+    color: #c0392b;
+    padding: 2px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+  }
+
+  /* ── LAYOUT ── */
+  .wrapper {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 40px;
+  }
+
+  /* ── MAIN ARTICLE ── */
+  .article-section {
+    border-right: 1px solid #ccc;
+    padding-right: 40px;
+  }
+
+  .article-category {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #c0392b;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .article-headline {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #1a1a1a;
+    margin-bottom: 14px;
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 14px;
+  }
+
+  .article-deck {
+    font-size: 18px;
+    font-weight: 300;
+    line-height: 1.55;
+    color: #333;
+    margin-bottom: 16px;
+    font-style: italic;
+  }
+
+  .article-byline {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: #666;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
+  .byline-author { color: #1a1a1a; font-weight: 600; }
+
+  .article-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+  }
+  .image-caption {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    color: #777;
+    margin-bottom: 24px;
+    line-height: 1.4;
+  }
+  .image-caption strong { color: #444; }
+
+  .article-body {
+    font-size: 16px;
+    line-height: 1.75;
+    color: #222;
+  }
+  .article-body p { margin-bottom: 18px; }
+  .article-body .drop-cap::first-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    font-weight: 900;
+    float: left;
+    line-height: 0.75;
+    margin: 6px 8px 0 0;
+    color: #1a1a1a;
+  }
+
+  .pull-quote {
+    border-top: 3px solid #1a1a1a;
+    border-bottom: 1px solid #1a1a1a;
+    margin: 28px 0;
+    padding: 16px 0 14px;
+  }
+  .pull-quote blockquote {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    font-style: italic;
+    line-height: 1.4;
+    color: #1a1a1a;
+  }
+  .pull-quote cite {
+    display: block;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: #666;
+    margin-top: 8px;
+    text-transform: uppercase;
+  }
+
+  .article-share {
+    display: flex;
+    gap: 8px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+  }
+  .share-btn {
+    padding: 6px 14px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #444;
+    font-size: 11px;
+    font-family: inherit;
+    transition: background 0.15s;
+  }
+  .share-btn:hover { background: #f0ece0; }
+  .share-btn.facebook { background: #1877f2; color: #fff; border-color: #1877f2; }
+  .share-btn.twitter  { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+
+  .likes {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #888;
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar { padding-top: 4px; }
+
+  .sidebar-widget { margin-bottom: 32px; }
+  .sidebar-widget-title {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #888;
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .trending-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #e0dbd0;
+  }
+  .trending-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: #ddd;
+    line-height: 1;
+    flex-shrink: 0;
+    width: 32px;
+  }
+  .trending-title {
+    font-family: 'Source Serif 4', serif;
+    font-size: 13px;
+    line-height: 1.4;
+    color: #222;
+  }
+  .trending-title:hover { color: #c0392b; cursor: pointer; }
+
+  .comment-box {
+    background: #1a1a1a;
+    color: #f5f0e8;
+    padding: 16px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .comment-box h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #c8a84b;
+  }
+  .comment-meta { color: #888; font-size: 11px; margin-top: 8px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #1a1a1a;
+    color: #888;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 11px;
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    letter-spacing: 0.05em;
+  }
+  footer strong { color: #c8a84b; }
+
+  /* ── COMMENTS SECTION ── */
+  .comments-section {
+    max-width: 1080px;
+    margin: 0 auto 40px;
+    padding: 0 24px;
+  }
+  .comments-section h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    border-bottom: 2px solid #1a1a1a;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+  }
+  .comment {
+    border-bottom: 1px solid #e0dbd0;
+    padding: 16px 0;
+  }
+  .comment-header {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 6px;
+  }
+  .comment-header strong { color: #1a1a1a; }
+  .comment p { font-size: 14px; line-height: 1.6; color: #333; }
+  .comment-likes { font-family: 'Source Sans 3', sans-serif; font-size: 11px; color: #888; margin-top: 6px; }
+
+  /* ── LIKE COUNTER ── */
+  .like-counter {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #c0392b;
+  }
+  .reactions-bar {
+    background: #fff;
+    border: 1px solid #e0dbd0;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 12px;
+    color: #666;
+  }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div>Donnerstag, 19. Februar 2026 &nbsp;|&nbsp; 08:47 Uhr &nbsp;|&nbsp; <span>Berlin, 3°C, bedeckt</span></div>
+  <div>Abonnieren &nbsp;|&nbsp; E-Paper &nbsp;|&nbsp; Newsletter &nbsp;|&nbsp; Login</div>
+</div>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-kicker">Unabhängige Qualitätsjournalismus seit 1952</div>
+  <h1>EuroPress Aktuell</h1>
+  <div class="masthead-sub">Politik · Wirtschaft · Gesellschaft · Digital</div>
+  <div class="masthead-meta">
+    <span>Nr. 49 / 2026</span>
+    <span>Donnerstag, 19. Februar 2026</span>
+    <span>europress-aktuell.de</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#">Startseite</a>
+  <a href="#" class="active">Politik</a>
+  <a href="#">Wirtschaft</a>
+  <a href="#">Europa</a>
+  <a href="#">Bildung</a>
+  <a href="#">Digital</a>
+  <a href="#">Meinung</a>
+  <a href="#">Sport</a>
+</nav>
+
+<!-- BREAKING BANNER -->
+<div class="breaking">
+  <span class="breaking-label">Eilmeldung</span>
+  EU-Bildungsrichtlinie verabschiedet – Schulen müssen reagieren
+</div>
+
+<!-- MAIN WRAPPER -->
+<div class="wrapper">
+
+  <!-- ARTICLE -->
+  <main class="article-section">
+    <div class="article-category">Europa · Bildungspolitik</div>
+
+    <h2 class="article-headline">
+      Neue EU-Richtlinie: Schulen dürfen Handys im Unterricht nicht mehr verbieten, da sie als »essenzielle Lernmittel« eingestuft werden
+    </h2>
+
+    <p class="article-deck">
+      Die EU hat entschieden: Schulen dürfen Handys im Unterricht nicht mehr wegnehmen. Lehrer sind wütend – Schüler feiern.
+    </p>
+
+    <div class="article-byline">
+      <span>Von <span class="byline-author">Dr. Markus Heller und Isabelle Fontaine</span> &nbsp;|&nbsp; EU-Korrespondenten</span>
+      <span>19. Februar 2026, 06:15 Uhr &nbsp;|&nbsp; 🕐 4 Min. Lesezeit</span>
+    </div>
+
+    <!-- IMAGE -->
+    <img src="classroom.png" alt="Schüler feiern mit Smartphones in der Klasse" class="article-image">
+    <div class="image-caption">
+      <strong>Jubel im Klassenzimmer:</strong> Schülerinnen und Schüler einer Berliner Gesamtschule reagierten am Donnerstagmorgen mit Begeisterung auf die Nachricht aus Brüssel. Laut Augenzeugenberichten verteilten einige Lehrkräfte sogar Konfetti. &nbsp;|&nbsp; Foto: dpa / M. Schiffer
+    </div>
+
+    <!-- REACTIONS -->
+    <div class="reactions-bar">
+      <span>Reaktionen:</span>
+      <span class="like-counter">❤️ 14.823</span>
+      <span>😂 3.291</span>
+      <span>😡 8.447</span>
+      <span>😮 6.102</span>
+      <span style="margin-left:auto;">💬 1.238 Kommentare &nbsp;|&nbsp; 📤 7.654 Mal geteilt</span>
+    </div>
+
+    <!-- BODY -->
+    <div class="article-body">
+
+      <p class="drop-cap"><strong>BRÜSSEL.</strong> Das EU-Parlament hat abgestimmt: 412 Politiker sagten Ja, 289 sagten Nein. Das Ergebnis: Handys sind jetzt offizielle Lernmittel – so wie Hefte oder Bücher. Kein Lehrer in Europa darf ein Handy mehr wegnehmen. Eine Forschungsgruppe hatte herausgefunden, dass Schüler mit Handy in Tests bis zu 12 Prozent besser abschneiden.</p>
+
+      <div class="pull-quote">
+        <blockquote>„Das Smartphone ist der Bleistift des 21. Jahrhunderts. Wir können nicht so tun, als lebten wir noch in den 1980er Jahren."</blockquote>
+        <cite>— EU-Bildungskommissarin Vera Jourová-Kowalski, Brüssel, 18. Februar 2026</cite>
+      </div>
+
+      <p>Viele Lehrer sind sehr sauer. Die Chefin des Deutschen Lehrerverbands sagt: „Das ist ein großer Fehler. Die Kinder können sich dann nicht mehr konzentrieren." Andere Studien zeigen nämlich das Gegenteil: Schüler lernen schlechter, wenn sie ein Handy dabei haben. Auf der anderen Seite freuen sich viele Schüler riesig. Im Internet wurde der Hashtag #HandyRecht über 340.000 Mal gepostet. In einer Schule in Berlin haben Schüler sogar Konfetti geworfen – wie auf dem Foto zu sehen.</p>
+
+    </div>
+
+    <!-- SHARE -->
+    <div class="article-share">
+      <button class="share-btn facebook">📘 Facebook</button>
+      <button class="share-btn twitter">𝕏 Teilen</button>
+      <button class="share-btn">📧 E-Mail</button>
+      <button class="share-btn">🔗 Link</button>
+      <div class="likes">👍 14.823 &nbsp;&nbsp; 💬 1.238</div>
+    </div>
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">Meist geteilt heute</div>
+      <div class="trending-item">
+        <div class="trending-num">1</div>
+        <div class="trending-title">EU verbietet Schulen, Handys zu konfiszieren – Lehrerverband empört</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-num">2</div>
+        <div class="trending-title">Bundesregierung plant Sondersitzung zur Umsetzung der Digital-Direktive</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-num">3</div>
+        <div class="trending-title">OECD-Studie: Smartphones im Unterricht senken Testergebnisse um 15 %</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-num">4</div>
+        <div class="trending-title">Datenschutzbeauftragter warnt vor Überwachung durch Schul-WLAN</div>
+      </div>
+      <div class="trending-item">
+        <div class="trending-num">5</div>
+        <div class="trending-title">Reaktionen aus aller Welt: Wie andere Länder mit dem Thema umgehen</div>
+      </div>
+    </div>
+
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">Top-Kommentar</div>
+      <div class="comment-box">
+        <h4>Was Leserinnen und Leser sagen</h4>
+        <p>„Absoluter Wahnsinn! Meine Tochter schreibt eh schon heimlich. Wenigstens ist es jetzt legal 😂 Aber im Ernst: Wer soll das kontrollieren?"</p>
+        <div class="comment-meta">— MamaVonDrei83 &nbsp;|&nbsp; 👍 4.291 Likes</div>
+      </div>
+    </div>
+
+    <div class="sidebar-widget">
+      <div class="sidebar-widget-title">Verwandte Themen</div>
+      <p style="font-size:13px;line-height:1.8;color:#333;">
+        • Bildungspolitik Europa<br>
+        • Digitalisierung Schule<br>
+        • Medienkonsum Jugendliche<br>
+        • EU-Parlament Abstimmungen<br>
+        • OECD Bildungsberichte
+      </p>
+    </div>
+
+  </aside>
+</div>
+
+
+
+<!-- FOOTER -->
+<footer>
+  <strong>EuroPress Aktuell</strong> &nbsp;|&nbsp; Friedrichstraße 44, 10117 Berlin &nbsp;|&nbsp; redaktion@europress-aktuell.de<br>
+  © 2026 EuroPress Mediengruppe GmbH &nbsp;|&nbsp; Impressum &nbsp;|&nbsp; Datenschutz &nbsp;|&nbsp; AGB &nbsp;|&nbsp; Nutzungsbedingungen
+</footer>
+
+</body>
+</html>
